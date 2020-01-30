@@ -154,7 +154,7 @@ class ELFFile(object):
             self.get_section_by_name('.zdebug_info') or
             self.get_section_by_name('.eh_frame'))
 
-    def get_dwarf_info(self, relocate_dwarf_sections=True):
+    def get_dwarf_info(self, relocate_dwarf_sections=None):
         """ Return a DWARFInfo object representing the debugging information in
             this file.
 
@@ -181,6 +181,9 @@ class ELFFile(object):
          debug_str_sec_name, debug_line_sec_name, debug_frame_sec_name,
          debug_loc_sec_name, debug_ranges_sec_name, debug_pubtypes_name,
          debug_pubnames_name, eh_frame_sec_name) = section_names
+
+        if relocate_dwarf_sections is None:
+            relocate_dwarf_sections = self['e_type'] == 'ET_REL'
 
         debug_sections = {}
         for secname in section_names:
